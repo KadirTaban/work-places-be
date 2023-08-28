@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: pinecone
+  profiles:
+    active: dev
+  messages:
+    basename: i18n/messages
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+
+server:
+  port: 8080

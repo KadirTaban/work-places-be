@@ -1,0 +1,9 @@
+user.register.request.email.notBlank=Email is required
+user.has.already.exists=Email already exists
+invalid.credentials=Invalid Credentials
+user.login.request.email.notBlank=Email cannot be null or blank
+user.login.request.password.notBlank=Password cannot be null or blank
+user.register.request.email.invalid=Invalid Email
+user.register.request.password.invalid=The password must contain at least one uppercase letter, one number and one special character.
+city.not.found=City not found with given parameter.
+place.create.request.name.notBlank=Name cannot be null or blank
