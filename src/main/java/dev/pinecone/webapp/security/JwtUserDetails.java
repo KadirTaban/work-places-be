@@ -1,6 +1,6 @@
 package dev.pinecone.webapp.security;
 
-import dev.pinecone.webapp.entity.User;
+import dev.pinecone.webapp.entity.Consumer;
 import dev.pinecone.webapp.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +26,8 @@ public class JwtUserDetails implements UserDetails {
     private String password;
     private Role role;
 
-    public static JwtUserDetails create(User user){
-        return new JwtUserDetails(user.getId(), user.getEmail(), user.getPassword(), user.getRole());
+    public static JwtUserDetails create(Consumer consumer){
+        return new JwtUserDetails(consumer.getId(), consumer.getEmail(), consumer.getPassword(), consumer.getRole());
     }
 
     @Override

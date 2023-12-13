@@ -1,9 +1,7 @@
 package dev.pinecone.webapp.config;
 
-import dev.pinecone.webapp.repository.UserRepository;
+import dev.pinecone.webapp.repository.ConsumerRepository;
 import dev.pinecone.webapp.security.JwtUserDetails;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
@@ -26,7 +23,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository repository;
+    private final ConsumerRepository repository;
 
     @Bean
     public UserDetailsService userDetailsService(){

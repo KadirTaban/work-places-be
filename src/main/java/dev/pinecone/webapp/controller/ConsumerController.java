@@ -4,7 +4,7 @@ import dev.pinecone.webapp.model.response.AuthResponse;
 import dev.pinecone.webapp.model.request.UserLoginRequest;
 import dev.pinecone.webapp.model.request.UserRegisterRequest;
 import dev.pinecone.webapp.model.response.BaseResponse;
-import dev.pinecone.webapp.service.UserService;
+import dev.pinecone.webapp.service.ConsumerService;
 import dev.pinecone.webapp.utils.constants.Apis;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(Apis.User.BASE_URL)
 @RequiredArgsConstructor
-public class UserController {
+public class ConsumerController {
 
-    private final UserService userService;
+    private final ConsumerService consumerService;
     private final MessageSource messageSource;
 
     @GetMapping
@@ -29,13 +29,13 @@ public class UserController {
 
     @PostMapping(Apis.User.LOGIN)
     public ResponseEntity<BaseResponse<AuthResponse>> login(@Valid @RequestBody UserLoginRequest request) {
-        BaseResponse<AuthResponse> response = userService.login(request);
+        BaseResponse<AuthResponse> response = consumerService.login(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(Apis.User.REGISTER)
     public ResponseEntity<BaseResponse<AuthResponse>> register(@Valid @RequestBody UserRegisterRequest request) {
-        BaseResponse<AuthResponse> response = userService.register(request);
+        BaseResponse<AuthResponse> response = consumerService.register(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -15,29 +15,39 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rates")
+@Table(name = "rate")
 public class Rate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "criteria")
+    private CriteriaRate criteria;
+
+    @Column(name = "rate")
+    private Double rate;
+
+    @Column(name = "place_id")
+    private Long placeId;
+
+    @Column(name = "consumer_id")
+    private Long consumerId;
+
     @CreationTimestamp
+    @Column(name = "created_date")
     private Date createdDate;
 
     @UpdateTimestamp
+    @Column(name = "updated_date")
     private Date updatedDate;
 
-    private Double rate;
-
-    @Enumerated(EnumType.STRING)
-    private CriteriaRate criteria;
-
     @ManyToOne
-    @JoinColumn(name = "place_id")
+    @JoinColumn(name = "place_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "FK__rate_place"))
     private Place place;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "consumer_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "FK__rate_consumer"))
+    private Consumer consumer;
 }

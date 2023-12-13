@@ -1,14 +1,13 @@
 package dev.pinecone.webapp.converter;
 
+import dev.pinecone.webapp.entity.Consumer;
 import dev.pinecone.webapp.entity.Place;
-import dev.pinecone.webapp.entity.User;
 import dev.pinecone.webapp.model.dto.PlaceDto;
 import dev.pinecone.webapp.model.request.PlaceCreateRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PlaceConverter {
-
 
     public PlaceDto toDto(Place place) {
         return PlaceDto
@@ -24,14 +23,14 @@ public class PlaceConverter {
                 .build();
     }
 
-    public Place toEntity(User user, PlaceCreateRequest request) {
+    public Place toEntity(Consumer consumer, PlaceCreateRequest request) {
         return Place.builder()
                 .city(request.getCity())
                 .name(request.getName())
                 .hasAC(request.isHasAc())
                 .hasElectricity(request.isHasElectricity())
                 .district(request.getDistrict())
-                .user(user)
+                .consumer(consumer)
                 .locationUrl(request.getLocationUrl())
                 .build();
     }

@@ -4,7 +4,6 @@ import dev.pinecone.webapp.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -14,20 +13,22 @@ import java.util.Date;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "consumer")
+public class Consumer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreationTimestamp
     private Date createDate;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
-
-
-
 }
