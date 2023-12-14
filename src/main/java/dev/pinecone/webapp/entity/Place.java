@@ -44,6 +44,9 @@ public class Place {
     @Column(name = "consumer_id")
     private Long consumerId;
 
+    @Column(name = "place_path")
+    private String placePath;
+
     @CreationTimestamp
     @Column(name = "created_date")
     private Date createdDate;

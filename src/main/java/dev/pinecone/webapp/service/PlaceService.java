@@ -5,6 +5,7 @@ import dev.pinecone.webapp.converter.RateConverter;
 import dev.pinecone.webapp.entity.Place;
 import dev.pinecone.webapp.entity.Rate;
 import dev.pinecone.webapp.entity.Consumer;
+import dev.pinecone.webapp.fileservice.FileService;
 import dev.pinecone.webapp.model.dto.PlaceRateDto;
 import dev.pinecone.webapp.model.dto.RateDto;
 import dev.pinecone.webapp.model.request.PlaceCreateRequest;
@@ -12,8 +13,11 @@ import dev.pinecone.webapp.repository.ConsumerRepository;
 import dev.pinecone.webapp.repository.PlaceRepository;
 import dev.pinecone.webapp.repository.RateRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,17 +32,20 @@ public class PlaceService {
     private final ConsumerRepository consumerRepository;
     private final RateRepository rateRepository;
     private final RateConverter rateConverter;
+    private final FileService fileService;
 
-    public void create(Long consumerId, PlaceCreateRequest request) {
-
+    @SneakyThrows
+    @Transactional
+    public void create(Long consumerId, PlaceCreateRequest request, MultipartFile file) {
         Optional<Consumer> optionalConsumer = consumerRepository.findById(consumerId);
         if (optionalConsumer.isEmpty()) {
             throw new RuntimeException("Consumer not found");
         }
-
+        final String imageUrl = fileService.saveFile(file);
         final Consumer consumer = optionalConsumer.get();
         final Place place = placeConverter.toEntity(consumer, request);
         place.setConsumerId(consumer.getId());
+        place.setPlacePath(imageUrl);
         placeRepository.save(place);
 
     }
@@ -49,12 +56,13 @@ public class PlaceService {
         if (optionalConsumer.isEmpty()) {
             throw new RuntimeException("Consumer not found");
         }
-        Consumer consumer = optionalConsumer.get();
+        final Consumer consumer = optionalConsumer.get();
         final Place place = placeRepository.findById(placeId).orElseThrow();
+        place.setConsumer(consumer);
         final List<Rate> rateList = rateRepository.findAllByPlaceId(placeId);
 
         final List<RateDto> rateDtoList = rateList.stream()
-                .map(rate -> rateConverter.convertAsDto(rate))
+                .map(rateConverter::convertAsDto)
                 .collect(Collectors.toList());
 
         return PlaceRateDto.builder()

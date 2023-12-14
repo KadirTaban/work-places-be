@@ -9,3 +9,10 @@ spring:
     username: postgres
     password: 123
     driverClassName: org.postgresql.Driver
+    cloud:
+      gcp:
+        project-id: work-places-be
+        firestore:
+          enabled: true
+        storage:
+          bucket: work-places-be.appspot.com

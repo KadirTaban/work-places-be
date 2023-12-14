@@ -5,10 +5,18 @@ spring:
     active: dev
   messages:
     basename: i18n/messages
+  cloud:
+    gcp:
+      project-id: work-places-be
+      firestore:
+        enabled: true
+      storage:
+          bucket: work-places-be.appspot.com
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
 
 
 server:

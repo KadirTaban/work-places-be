@@ -7,6 +7,7 @@ import dev.pinecone.webapp.utils.constants.Apis;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +22,9 @@ public class PlaceController {
     }
 
     @PostMapping
-    public void create(@RequestParam Long consumerId, @Valid @RequestBody PlaceCreateRequest placeCreateRequest) {
-        placeService.create(consumerId, placeCreateRequest);
+    public void create(@RequestParam Long consumerId,
+                       @Valid @RequestBody PlaceCreateRequest placeCreateRequest,
+                       @RequestPart MultipartFile file) {
+        placeService.create(consumerId, placeCreateRequest, file);
     }
 }
