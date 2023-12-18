@@ -5,7 +5,7 @@ import dev.pinecone.webapp.converter.RateConverter;
 import dev.pinecone.webapp.entity.Place;
 import dev.pinecone.webapp.entity.Rate;
 import dev.pinecone.webapp.entity.Consumer;
-import dev.pinecone.webapp.fileservice.FileService;
+import dev.pinecone.webapp.model.dto.InputFileDto;
 import dev.pinecone.webapp.model.dto.PlaceRateDto;
 import dev.pinecone.webapp.model.dto.RateDto;
 import dev.pinecone.webapp.model.request.PlaceCreateRequest;
@@ -37,15 +37,15 @@ public class PlaceService {
     @SneakyThrows
     @Transactional
     public void create(Long consumerId, PlaceCreateRequest request, MultipartFile file) {
-        Optional<Consumer> optionalConsumer = consumerRepository.findById(consumerId);
+        final Optional<Consumer> optionalConsumer = consumerRepository.findById(consumerId);
         if (optionalConsumer.isEmpty()) {
             throw new RuntimeException("Consumer not found");
         }
-        final String imageUrl = fileService.saveFile(file);
         final Consumer consumer = optionalConsumer.get();
         final Place place = placeConverter.toEntity(consumer, request);
+        final InputFileDto inputFileDto = fileService.uploadFiles(file);
+        place.setPlacePath(inputFileDto.getFileUrl());
         place.setConsumerId(consumer.getId());
-        place.setPlacePath(imageUrl);
         placeRepository.save(place);
 
     }
