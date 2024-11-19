@@ -1,18 +1,23 @@
 package dev.pinecone.webapp.controller;
 
-import dev.pinecone.webapp.model.response.AuthResponse;
 import dev.pinecone.webapp.model.request.UserLoginRequest;
 import dev.pinecone.webapp.model.request.UserRegisterRequest;
+import dev.pinecone.webapp.model.response.AuthResponse;
 import dev.pinecone.webapp.model.response.BaseResponse;
 import dev.pinecone.webapp.service.ConsumerService;
 import dev.pinecone.webapp.utils.constants.Apis;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import static dev.pinecone.webapp.utils.constants.HeaderConstants.X_CONSUMER_ID;
 
 @RestController
 @RequestMapping(Apis.User.BASE_URL)
@@ -20,11 +25,10 @@ import org.springframework.web.bind.annotation.*;
 public class ConsumerController {
 
     private final ConsumerService consumerService;
-    private final MessageSource messageSource;
 
     @GetMapping
-    public String test(){
-        return messageSource.getMessage("user.register.request.email.notBlank",null,LocaleContextHolder.getLocale());
+    public String getInfo() {
+        return consumerService.getInfo();
     }
 
     @PostMapping(Apis.User.LOGIN)

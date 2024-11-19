@@ -1,5 +1,6 @@
-package dev.pinecone.webapp.security;
+package dev.pinecone.webapp.interceptor;
 
+import dev.pinecone.webapp.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -2,51 +2,41 @@ package dev.pinecone.webapp.service;
 
 import dev.pinecone.webapp.converter.PlaceConverter;
 import dev.pinecone.webapp.converter.RateConverter;
+import dev.pinecone.webapp.entity.Consumer;
 import dev.pinecone.webapp.entity.Place;
 import dev.pinecone.webapp.entity.Rate;
-import dev.pinecone.webapp.entity.Consumer;
-import dev.pinecone.webapp.model.dto.InputFileDto;
 import dev.pinecone.webapp.model.dto.PlaceRateDto;
 import dev.pinecone.webapp.model.dto.RateDto;
 import dev.pinecone.webapp.model.request.PlaceCreateRequest;
 import dev.pinecone.webapp.repository.ConsumerRepository;
 import dev.pinecone.webapp.repository.PlaceRepository;
 import dev.pinecone.webapp.repository.RateRepository;
+import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static dev.pinecone.webapp.converter.PlaceConverter.toDto;
+import static dev.pinecone.webapp.converter.PlaceConverter.toEntity;
+import static dev.pinecone.webapp.utils.constants.HeaderConstants.X_CONSUMER_ID;
 
 @Service
 @RequiredArgsConstructor
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
-    private final PlaceConverter placeConverter;
     private final ConsumerRepository consumerRepository;
     private final RateRepository rateRepository;
-    private final RateConverter rateConverter;
-    private final FileService fileService;
 
-    @SneakyThrows
-    @Transactional
-    public void create(Long consumerId, PlaceCreateRequest request, MultipartFile file) {
-        final Optional<Consumer> optionalConsumer = consumerRepository.findById(consumerId);
-        if (optionalConsumer.isEmpty()) {
-            throw new RuntimeException("Consumer not found");
-        }
-        final Consumer consumer = optionalConsumer.get();
-        final Place place = placeConverter.toEntity(consumer, request);
-        final InputFileDto inputFileDto = fileService.uploadFiles(file);
-        place.setPlacePath(inputFileDto.getFileUrl());
-        place.setConsumerId(consumer.getId());
-        placeRepository.save(place);
+    public void create(PlaceCreateRequest request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        final Optional<Consumer> optionalConsumer = consumerRepository.findByEmail(email);
+        optionalConsumer.ifPresent(consumer -> placeRepository.save(toEntity(consumer, request)));
 
     }
 
@@ -62,11 +52,11 @@ public class PlaceService {
         final List<Rate> rateList = rateRepository.findAllByPlaceId(placeId);
 
         final List<RateDto> rateDtoList = rateList.stream()
-                .map(rateConverter::convertAsDto)
+                .map(RateConverter::convertAsDto)
                 .collect(Collectors.toList());
 
         return PlaceRateDto.builder()
-                .placeDto(placeConverter.toDto(place))
+                .placeDto(toDto(place))
                 .rateDtoList(rateDtoList)
                 .build();
     }

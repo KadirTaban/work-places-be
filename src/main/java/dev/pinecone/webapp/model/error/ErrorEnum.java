@@ -10,8 +10,8 @@ public enum ErrorEnum {
     INVALID_CREDENTIALS(1001, "invalid.credentials", HttpStatus.BAD_REQUEST),
     CITY_NOT_FOUND(1003, "city.not.found", HttpStatus.NOT_FOUND),
     FILE_BAD_REQUEST(1004, "file.bad.request", HttpStatus.BAD_REQUEST),
-    FILE_WRONG_FORMAT(1005,"file.wrong.format" ,HttpStatus.BAD_REQUEST )
-    ;
+    FILE_WRONG_FORMAT(1005,"file.wrong.format" ,HttpStatus.BAD_REQUEST ),
+    UNAUTHORIZED(1005,"unauthorized" ,HttpStatus.BAD_REQUEST );
 
     private final int code;
     private final String messageTemplate;

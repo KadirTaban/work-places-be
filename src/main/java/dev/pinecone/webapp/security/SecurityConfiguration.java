@@ -1,5 +1,6 @@
 package dev.pinecone.webapp.security;
 
+import dev.pinecone.webapp.interceptor.JwtAuthenticationFilter;
 import dev.pinecone.webapp.utils.constants.Apis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +47,7 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/swagger-ui.html",
             // other public endpoints of your API may be appended to this array
-            "api/v1/users/**",
+            "/api/v1/users/**",
             Apis.City.BASE_URL+"/**",
             Apis.District.BASE_URL+"/**"
     };
